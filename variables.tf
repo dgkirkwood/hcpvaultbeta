@@ -20,3 +20,7 @@ variable "client_id" {
 variable "client_secret" {
     description = "The Client secret for your Azure SP"
 }
+
+variable "subscription_id" {
+    default = "Azure subscription ID"
+}
