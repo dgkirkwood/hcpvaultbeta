@@ -152,6 +152,18 @@ resource "vault_generic_endpoint" "bob" {
 EOT
 }
 
+resource "vault_generic_endpoint" "admin" {
+  depends_on           = [vault_auth_backend.userpass]
+  path                 = "auth/userpass/users/admin"
+  ignore_absent_fields = true
+
+  data_json = <<EOT
+{
+  "password": "admin"
+}
+EOT
+}
+
 #Create an entity for Alice. Used to map many auth methods to a single user or service. 
 resource "vault_identity_entity" "alice" {
   name      = "alice"
@@ -176,6 +188,16 @@ resource "vault_identity_entity_alias" "bob_userpass" {
   canonical_id    = vault_identity_entity.bob.id
 }
 
+resource "vault_identity_entity" "admin" {
+  name      = "admin"
+}
+
+resource "vault_identity_entity_alias" "admin_userpass" {
+  name            = "admin"
+  mount_accessor  = vault_auth_backend.userpass.accessor
+  canonical_id    = vault_identity_entity.admin.id
+}
+
 
 #Create groups for your entities to map common policies
 resource "vault_identity_group" "rnd" {
@@ -191,6 +213,13 @@ resource "vault_identity_group" "prod" {
   type     = "internal"
   policies = ["prod"]
   member_entity_ids = [vault_identity_entity.bob.id]
+}
+
+resource "vault_identity_group" "admin" {
+  name     = "admin"
+  type     = "internal"
+  policies = ["admin"]
+  member_entity_ids = [vault_identity_entity.admin.id]
 }
 
 
@@ -223,6 +252,16 @@ resource "vault_policy" "prod" {
     }
 EOT
 }
+
+resource "vault_policy" "admin" {
+  name = "admin"
+  policy = <<EOT
+    path "*" {
+      capabilities = ["sudo","read","create","update","delete","list"]
+    }
+EOT
+}
+
 
 
 resource "vault_auth_backend" "approle" {
