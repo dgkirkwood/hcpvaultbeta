@@ -117,7 +117,7 @@ resource "vault_pki_secret_backend_role" "prod" {
   name    = "prod"
   allowed_domains = ["dkcorp.local"]
   allow_subdomains = true
-  max_ttl = "72h"
+  max_ttl = "300s"
 }
 
 #Define the Userpass auth method
@@ -221,4 +221,29 @@ resource "vault_policy" "prod" {
         capabilities = ["list", "read", "create", "update"]
     }
 EOT
+}
+
+
+resource "vault_auth_backend" "approle" {
+  type = "approle"
+}
+
+resource "vault_approle_auth_backend_role" "prod" {
+  backend        = vault_auth_backend.approle.path
+  role_name      = "prod"
+  token_policies = ["prod"]
+  token_ttl = "48h"
+}
+
+resource "vault_approle_auth_backend_role_secret_id" "agent" {
+  backend   = vault_auth_backend.approle.path
+  role_name = vault_approle_auth_backend_role.prod.role_name
+}
+
+output "roleid" {
+  value = vault_approle_auth_backend_role.prod.role_id
+}
+
+output "secretid" {
+  value = vault_approle_auth_backend_role_secret_id.agent.secret_id
 }
