@@ -111,6 +111,22 @@ resource "vault_pki_secret_backend_root_cert" "rootca" {
   organization = "DK Corp"
 }
 
+resource "vault_pki_secret_backend_root_cert" "newroot" {
+  depends_on = [vault_mount.pki]
+
+  backend = vault_mount.pki.path
+
+  type = "internal"
+  common_name = "Root CA"
+  ttl = "315360000"
+  format = "pem"
+  private_key_format = "der"
+  key_type = "rsa"
+  key_bits = 4096
+  exclude_cn_from_sans = true
+  ou = "DevOps"
+  organization = "DK Corp"
+}
 
 resource "vault_pki_secret_backend_role" "prod" {
   backend = vault_mount.pki.path
