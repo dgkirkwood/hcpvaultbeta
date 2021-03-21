@@ -119,7 +119,7 @@ resource "vault_pki_secret_backend_root_cert" "newroot" {
   backend = vault_mount.pki.path
 
   type = "internal"
-  common_name = "Root CA"
+  common_name = "dkcorp.local"
   ttl = "315360000"
   format = "pem"
   private_key_format = "der"
