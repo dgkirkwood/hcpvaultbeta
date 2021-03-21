@@ -94,6 +94,7 @@ resource "vault_pki_secret_backend_config_urls" "config_urls" {
   crl_distribution_points = ["http://127.0.0.1:8200/v1/pki/crl"]
 }
 
+/*
 resource "vault_pki_secret_backend_root_cert" "rootca" {
   depends_on = [vault_mount.pki]
 
@@ -110,6 +111,7 @@ resource "vault_pki_secret_backend_root_cert" "rootca" {
   ou = "DevOps"
   organization = "DK Corp"
 }
+*/
 
 resource "vault_pki_secret_backend_root_cert" "newroot" {
   depends_on = [vault_mount.pki]
