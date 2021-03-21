@@ -118,6 +118,7 @@ resource "vault_pki_secret_backend_role" "prod" {
   allowed_domains = ["dkcorp.local"]
   allow_subdomains = true
   max_ttl = "300s"
+  generate_lease = true
 }
 
 #Define the Userpass auth method
