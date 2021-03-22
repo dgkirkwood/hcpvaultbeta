@@ -299,6 +299,7 @@ resource "vault_approle_auth_backend_role_secret_id" "agent" {
   role_name = vault_approle_auth_backend_role.prod.role_name
 }
 
+/*
 resource "vault_pki_secret_backend_cert" "app" {
 
   backend = vault_mount.pki.path
@@ -309,9 +310,11 @@ resource "vault_pki_secret_backend_cert" "app" {
   min_seconds_remaining = 120
 }
 
+
 output "cert" {
   value = vault_pki_secret_backend_cert.app.certificate
 }
+*/
 
 output "roleid" {
   value = vault_approle_auth_backend_role.prod.role_id
