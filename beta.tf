@@ -81,19 +81,41 @@ resource "vault_transit_secret_backend_key" "key" {
 }
 
 
-resource "vault_mount" "pki" {
-  type = "pki"
-  path = "pki"
+# resource "vault_mount" "pki" {
+#   type = "pki"
+#   path = "pki"
+#   default_lease_ttl_seconds = 3600
+#   max_lease_ttl_seconds = 86400
+# }
+
+resource "vault_pki_secret_backend" "pki" {
+  path = "dkcorp"
   default_lease_ttl_seconds = 3600
   max_lease_ttl_seconds = 86400
 }
 
 resource "vault_pki_secret_backend_config_urls" "config_urls" {
-  backend              = vault_mount.pki.path
+  backend              = vault_pki_secret_backend.pki.path
   issuing_certificates = ["http://127.0.0.1:8200/v1/pki/ca"]
   crl_distribution_points = ["http://127.0.0.1:8200/v1/pki/crl"]
 }
 
+resource "vault_pki_secret_backend_root_cert" "danrootca" {
+  depends_on = [vault_pki_secret_backend.pki]
+
+  backend = vault_pki_secret_backend.pki.path
+
+  type = "internal"
+  common_name = "dancorp.lab"
+  ttl = "8760h"
+  format = "pem"
+  private_key_format = "der"
+  key_type = "rsa"
+  key_bits = 4096
+  exclude_cn_from_sans = true
+  ou = "DevOps"
+  organization = "DanCorp"
+}
 
 /*
 resource "vault_pki_secret_backend_root_cert" "newroot" {
@@ -114,27 +136,27 @@ resource "vault_pki_secret_backend_root_cert" "newroot" {
 }
 */
 
-resource "vault_pki_secret_backend_root_cert" "hourroot" {
-  depends_on = [vault_mount.pki]
+# resource "vault_pki_secret_backend_root_cert" "hourroot" {
+#   depends_on = [vault_mount.pki]
 
-  backend = vault_mount.pki.path
+#   backend = vault_mount.pki.path
 
-  type = "internal"
-  common_name = "dkcorp.local"
-  ttl = "8760h"
-  format = "pem"
-  private_key_format = "der"
-  key_type = "rsa"
-  key_bits = 4096
-  exclude_cn_from_sans = true
-  ou = "DevOps"
-  organization = "DK Corp"
-}
+#   type = "internal"
+#   common_name = "dkcorp.local"
+#   ttl = "8760h"
+#   format = "pem"
+#   private_key_format = "der"
+#   key_type = "rsa"
+#   key_bits = 4096
+#   exclude_cn_from_sans = true
+#   ou = "DevOps"
+#   organization = "DK Corp"
+# }
 
 resource "vault_pki_secret_backend_role" "prod" {
-  backend = vault_mount.pki.path
+  backend = vault_pki_secret_backend.pki.path
   name    = "prod"
-  allowed_domains = ["dkcorp.local"]
+  allowed_domains = ["dancorp.lab"]
   allow_subdomains = true
   max_ttl = "300s"
   generate_lease = true
