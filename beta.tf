@@ -287,7 +287,7 @@ resource "vault_approle_auth_backend_role_secret_id" "agent" {
 resource "vault_pki_secret_backend_cert" "app" {
 
   backend = vault_pki_secret_backend.pki.path
-  name = vault_pki_secret_backend_role.prod.name
+  name = vault_pki_secret_backend_role.newprod.name
 
   common_name = "mylb.dancorp.lab"
   auto_renew = true
