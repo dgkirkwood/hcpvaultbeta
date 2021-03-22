@@ -94,11 +94,18 @@ resource "vault_pki_secret_backend" "pki" {
   max_lease_ttl_seconds = 86400
 }
 
-resource "vault_pki_secret_backend_config_urls" "config_urls" {
+# resource "vault_pki_secret_backend_config_urls" "config_urls" {
+#   backend              = vault_pki_secret_backend.pki.path
+#   issuing_certificates = ["http://127.0.0.1:8200/v1/pki/ca"]
+#   crl_distribution_points = ["http://127.0.0.1:8200/v1/pki/crl"]
+# }
+
+resource "vault_pki_secret_backend_config_urls" "new_config_urls" {
   backend              = vault_pki_secret_backend.pki.path
   issuing_certificates = ["http://127.0.0.1:8200/v1/pki/ca"]
   crl_distribution_points = ["http://127.0.0.1:8200/v1/pki/crl"]
 }
+
 
 resource "vault_pki_secret_backend_root_cert" "danrootca" {
   depends_on = [vault_pki_secret_backend.pki]
@@ -153,7 +160,7 @@ resource "vault_pki_secret_backend_root_cert" "newroot" {
 #   organization = "DK Corp"
 # }
 
-resource "vault_pki_secret_backend_role" "prod" {
+resource "vault_pki_secret_backend_role" "newprod" {
   backend = vault_pki_secret_backend.pki.path
   name    = "prod"
   allowed_domains = ["dancorp.lab"]
