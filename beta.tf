@@ -94,14 +94,15 @@ resource "vault_pki_secret_backend_config_urls" "config_urls" {
   crl_distribution_points = ["http://127.0.0.1:8200/v1/pki/crl"]
 }
 
+
 /*
-resource "vault_pki_secret_backend_root_cert" "rootca" {
+resource "vault_pki_secret_backend_root_cert" "newroot" {
   depends_on = [vault_mount.pki]
 
   backend = vault_mount.pki.path
 
   type = "internal"
-  common_name = "Root CA"
+  common_name = "dkcorp.local"
   ttl = "315360000"
   format = "pem"
   private_key_format = "der"
@@ -113,14 +114,14 @@ resource "vault_pki_secret_backend_root_cert" "rootca" {
 }
 */
 
-resource "vault_pki_secret_backend_root_cert" "newroot" {
+resource "vault_pki_secret_backend_root_cert" "hourroot" {
   depends_on = [vault_mount.pki]
 
   backend = vault_mount.pki.path
 
   type = "internal"
   common_name = "dkcorp.local"
-  ttl = "315360000"
+  ttl = "8760h"
   format = "pem"
   private_key_format = "der"
   key_type = "rsa"
