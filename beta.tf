@@ -288,7 +288,7 @@ resource "vault_policy" "prod" {
     path "${vault_mount.kv.path}/data/prod" {
         capabilities = ["list", "read"]
     }
-    path "${vault_mount.pki.path}/*" {
+    path "${vault_pki_secret_backend.pki.path}/*" {
         capabilities = ["list", "read", "create", "update"]
     }
 EOT
