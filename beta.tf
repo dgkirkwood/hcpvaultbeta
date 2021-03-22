@@ -81,24 +81,13 @@ resource "vault_transit_secret_backend_key" "key" {
 }
 
 
-# resource "vault_mount" "pki" {
-#   type = "pki"
-#   path = "pki"
-#   default_lease_ttl_seconds = 3600
-#   max_lease_ttl_seconds = 86400
-# }
-
 resource "vault_pki_secret_backend" "pki" {
   path = "dkcorp"
   default_lease_ttl_seconds = 3600
   max_lease_ttl_seconds = 86400
 }
 
-# resource "vault_pki_secret_backend_config_urls" "config_urls" {
-#   backend              = vault_pki_secret_backend.pki.path
-#   issuing_certificates = ["http://127.0.0.1:8200/v1/pki/ca"]
-#   crl_distribution_points = ["http://127.0.0.1:8200/v1/pki/crl"]
-# }
+
 
 resource "vault_pki_secret_backend_config_urls" "new_config_urls" {
   backend              = vault_pki_secret_backend.pki.path
@@ -124,41 +113,7 @@ resource "vault_pki_secret_backend_root_cert" "danrootca" {
   organization = "DanCorp"
 }
 
-/*
-resource "vault_pki_secret_backend_root_cert" "newroot" {
-  depends_on = [vault_mount.pki]
 
-  backend = vault_mount.pki.path
-
-  type = "internal"
-  common_name = "dkcorp.local"
-  ttl = "315360000"
-  format = "pem"
-  private_key_format = "der"
-  key_type = "rsa"
-  key_bits = 4096
-  exclude_cn_from_sans = true
-  ou = "DevOps"
-  organization = "DK Corp"
-}
-*/
-
-# resource "vault_pki_secret_backend_root_cert" "hourroot" {
-#   depends_on = [vault_mount.pki]
-
-#   backend = vault_mount.pki.path
-
-#   type = "internal"
-#   common_name = "dkcorp.local"
-#   ttl = "8760h"
-#   format = "pem"
-#   private_key_format = "der"
-#   key_type = "rsa"
-#   key_bits = 4096
-#   exclude_cn_from_sans = true
-#   ou = "DevOps"
-#   organization = "DK Corp"
-# }
 
 resource "vault_pki_secret_backend_role" "newprod" {
   backend = vault_pki_secret_backend.pki.path
@@ -328,13 +283,13 @@ resource "vault_approle_auth_backend_role_secret_id" "agent" {
   role_name = vault_approle_auth_backend_role.prod.role_name
 }
 
-/*
+
 resource "vault_pki_secret_backend_cert" "app" {
 
-  backend = vault_mount.pki.path
+  backend = vault_pki_secret_backend.pki.path
   name = vault_pki_secret_backend_role.prod.name
 
-  common_name = "mylb.dkcorp.local"
+  common_name = "mylb.dancorp.lab"
   auto_renew = true
   min_seconds_remaining = 120
 }
@@ -343,7 +298,7 @@ resource "vault_pki_secret_backend_cert" "app" {
 output "cert" {
   value = vault_pki_secret_backend_cert.app.certificate
 }
-*/
+
 
 output "roleid" {
   value = vault_approle_auth_backend_role.prod.role_id
