@@ -81,29 +81,30 @@ resource "vault_transit_secret_backend_key" "key" {
 }
 
 
-resource "vault_pki_secret_backend" "pki" {
-  path = "dkcorp"
+
+resource "vault_pki_secret_backend" "dancorp" {
+  path = "dancorp"
   default_lease_ttl_seconds = 3600
   max_lease_ttl_seconds = 86400
 }
 
 
-
-resource "vault_pki_secret_backend_config_urls" "new_config_urls" {
-  backend              = vault_pki_secret_backend.pki.path
+resource "vault_pki_secret_backend_config_urls" "dancorp_config_urls" {
+  backend              = vault_pki_secret_backend.dancorp.path
   issuing_certificates = ["http://127.0.0.1:8200/v1/pki/ca"]
   crl_distribution_points = ["http://127.0.0.1:8200/v1/pki/crl"]
 }
 
 
-resource "vault_pki_secret_backend_root_cert" "danrootca" {
-  depends_on = [vault_pki_secret_backend.pki]
 
-  backend = vault_pki_secret_backend.pki.path
+resource "vault_pki_secret_backend_root_cert" "dancorprootca" {
+  depends_on = [vault_pki_secret_backend.dancorp]
+
+  backend = vault_pki_secret_backend.dancorp.path
 
   type = "internal"
-  common_name = "dancorp.lab"
-  ttl = "8760h"
+  common_name = "dancorp.net"
+  ttl = "10000h"
   format = "pem"
   private_key_format = "der"
   key_type = "rsa"
@@ -115,10 +116,10 @@ resource "vault_pki_secret_backend_root_cert" "danrootca" {
 
 
 
-resource "vault_pki_secret_backend_role" "newprod" {
-  backend = vault_pki_secret_backend.pki.path
+resource "vault_pki_secret_backend_role" "dancorp" {
+  backend = vault_pki_secret_backend.dancorp.path
   name    = "prod"
-  allowed_domains = ["dancorp.lab"]
+  allowed_domains = ["dancorp.net"]
   allow_subdomains = true
   max_ttl = "300s"
   generate_lease = true
@@ -250,7 +251,7 @@ resource "vault_policy" "prod" {
     path "${vault_mount.kv.path}/data/prod" {
         capabilities = ["list", "read"]
     }
-    path "${vault_pki_secret_backend.pki.path}/*" {
+    path "${vault_pki_secret_backend.dancorp.path}/*" {
         capabilities = ["list", "read", "create", "update"]
     }
 EOT
@@ -284,19 +285,19 @@ resource "vault_approle_auth_backend_role_secret_id" "agent" {
 }
 
 
-resource "vault_pki_secret_backend_cert" "app" {
+resource "vault_pki_secret_backend_cert" "dancorp" {
 
-  backend = vault_pki_secret_backend.pki.path
-  name = vault_pki_secret_backend_role.newprod.name
+  backend = vault_pki_secret_backend.dancorp.path
+  name = vault_pki_secret_backend_role.dancorp.name
 
-  common_name = "mylb.dancorp.lab"
+  common_name = "mylb.dancorp.net"
   auto_renew = true
   min_seconds_remaining = 120
 }
 
 
 output "cert" {
-  value = vault_pki_secret_backend_cert.app.certificate
+  value = vault_pki_secret_backend_cert.dancorp.certificate
 }
 
 
