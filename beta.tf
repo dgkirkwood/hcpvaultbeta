@@ -84,6 +84,7 @@ resource "vault_transit_secret_backend_key" "key" {
 
 resource "vault_mount" "dancorp" {
   path = "dancorp"
+  type = "pki"
   default_lease_ttl_seconds = 3600
   max_lease_ttl_seconds = 86400
 }
@@ -288,8 +289,8 @@ resource "vault_approle_auth_backend_role" "prod" {
 
 resource "vault_pki_secret_backend_cert" "dancorp" {
 
-  backend = vault_pki_secret_backend.dancorp.path
-  name = vault_pki_secret_backend_role.dancorp.name
+  backend = vault_mount.dancorp.path
+  name = vault_mount.dancorp.name
 
   common_name = "mylb.dancorp.net"
   auto_renew = true
