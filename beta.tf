@@ -282,6 +282,26 @@ resource "vault_approle_auth_backend_role" "prod" {
   token_ttl = 172800
 }
 
+resource "vault_approle_auth_backend_role" "appx" {
+  backend        = vault_auth_backend.approle.path
+  role_name      = "appx"
+  token_policies = ["prod"]
+  token_ttl = 172800
+}
+
+resource "vault_identity_entity" "appx" {
+  name      = "appx"
+}
+
+#Create an alias that maps the auth method (userpass) back to your entity. Entities can have zero to many aliases. 
+resource "vault_identity_entity_alias" "appx_approle" {
+  name            = vault_approle_auth_backend_role.appx.role_id
+  mount_accessor  = vault_auth_backend.approle.accessor
+  canonical_id    = vault_identity_entity.appx.id
+}
+
+
+
 resource "vault_approle_auth_backend_role_secret_id" "agent" {
   backend   = vault_auth_backend.approle.path
   role_name = vault_approle_auth_backend_role.prod.role_name
