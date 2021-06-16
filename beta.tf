@@ -292,7 +292,7 @@ resource "vault_pki_secret_backend_cert" "dancorp" {
 
   backend = vault_mount.dancorp.path
   name = vault_pki_secret_backend_role.dancorp.name
-  ttl = 86400
+  ttl = 250
 
   common_name = "mylb.dancorp.net"
   auto_renew = true
