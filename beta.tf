@@ -78,6 +78,7 @@ resource "vault_mount" "transit" {
 resource "vault_transit_secret_backend_key" "key" {
   backend = vault_mount.transit.path
   name    = "rnd"
+  deletion_allowed = true
 }
 
 
@@ -85,8 +86,8 @@ resource "vault_transit_secret_backend_key" "key" {
 resource "vault_mount" "dancorp" {
   path = "dancorp"
   type = "pki"
-  default_lease_ttl_seconds = 3600
-  max_lease_ttl_seconds = 86400
+  default_lease_ttl_seconds = 315360000
+  max_lease_ttl_seconds = 315360001
 }
 
 
@@ -291,6 +292,7 @@ resource "vault_pki_secret_backend_cert" "dancorp" {
 
   backend = vault_mount.dancorp.path
   name = vault_pki_secret_backend_role.dancorp.name
+  ttl = 86400
 
   common_name = "mylb.dancorp.net"
   auto_renew = true
