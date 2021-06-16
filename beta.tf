@@ -253,7 +253,7 @@ resource "vault_policy" "prod" {
     path "${vault_mount.kv.path}/data/prod" {
         capabilities = ["list", "read"]
     }
-    path "${vault_pki_secret_backend.dancorp.path}/prod" {
+    path "${vault_mount.dancorp.path}/prod" {
         capabilities = ["list", "read", "create", "update"]
     }
 EOT
@@ -290,7 +290,7 @@ resource "vault_approle_auth_backend_role" "prod" {
 resource "vault_pki_secret_backend_cert" "dancorp" {
 
   backend = vault_mount.dancorp.path
-  name = vault_mount.dancorp.name
+  name = vault_pki_secret_backend_role.dancorp.name
 
   common_name = "mylb.dancorp.net"
   auto_renew = true
