@@ -82,7 +82,7 @@ resource "vault_transit_secret_backend_key" "key" {
 
 
 
-resource "vault_pki_secret_backend" "dancorp" {
+resource "vault_mount" "dancorp" {
   path = "dancorp"
   default_lease_ttl_seconds = 3600
   max_lease_ttl_seconds = 86400
@@ -91,7 +91,7 @@ resource "vault_pki_secret_backend" "dancorp" {
 
 
 resource "vault_pki_secret_backend_config_urls" "dancorp_config_urls" {
-  backend              = vault_pki_secret_backend.dancorp.path
+  backend              = vault_mount.dancorp.path
   issuing_certificates = ["http://127.0.0.1:8200/v1/pki/ca"]
   crl_distribution_points = ["http://127.0.0.1:8200/v1/pki/crl"]
 }
@@ -99,13 +99,13 @@ resource "vault_pki_secret_backend_config_urls" "dancorp_config_urls" {
 
 
 resource "vault_pki_secret_backend_root_cert" "dancorprootca" {
-  depends_on = [vault_pki_secret_backend.dancorp]
+  depends_on = [vault_mount.dancorp]
 
-  backend = vault_pki_secret_backend.dancorp.path
+  backend = vault_mount.dancorp.path
 
   type = "internal"
   common_name = "dancorp.net"
-  ttl = "10000h"
+  ttl = "315360000"
   format = "pem"
   private_key_format = "der"
   key_type = "rsa"
@@ -118,7 +118,7 @@ resource "vault_pki_secret_backend_root_cert" "dancorprootca" {
 
 
 resource "vault_pki_secret_backend_role" "dancorp" {
-  backend = vault_pki_secret_backend.dancorp.path
+  backend = vault_mount.dancorp.path
   name    = "prod"
   allowed_domains = ["dancorp.net"]
   allow_subdomains = true
