@@ -280,10 +280,10 @@ resource "vault_approle_auth_backend_role" "prod" {
   token_ttl = 172800
 }
 
-resource "vault_approle_auth_backend_role_secret_id" "agent" {
-  backend   = vault_auth_backend.approle.path
-  role_name = vault_approle_auth_backend_role.prod.role_name
-}
+# resource "vault_approle_auth_backend_role_secret_id" "agent" {
+#   backend   = vault_auth_backend.approle.path
+#   role_name = vault_approle_auth_backend_role.prod.role_name
+# }
 
 
 resource "vault_pki_secret_backend_cert" "dancorp" {
