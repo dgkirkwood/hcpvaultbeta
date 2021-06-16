@@ -311,5 +311,5 @@ output "roleid" {
 
 output "secretid" {
   value = vault_approle_auth_backend_role_secret_id.agent.secret_id
-
+  sensitive = false
 }
