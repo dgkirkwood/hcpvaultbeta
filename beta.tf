@@ -318,8 +318,8 @@ resource "vault_generic_secret" "approledetails" {
     path = "${vault_mount.kv.path}/approle"
     data_json = <<EOT
     {
-        "roleid": ${vault_approle_auth_backend_role.prod.role_id},
-        "secretid": ${vault_approle_auth_backend_role_secret_id.agent.secret_id}
+        "roleid": "${vault_approle_auth_backend_role.prod.role_id}",
+        "secretid": "${vault_approle_auth_backend_role_secret_id.agent.secret_id}"
     }
     EOT
 }
