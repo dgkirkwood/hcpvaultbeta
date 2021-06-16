@@ -306,7 +306,7 @@ output "roleid" {
   value = vault_approle_auth_backend_role.prod.role_id
 }
 
-output "secretid" {
-  value = vault_approle_auth_backend_role_secret_id.agent.secret_id
-  sensitive = true
-}
+# output "secretid" {
+#   value = vault_approle_auth_backend_role_secret_id.agent.secret_id
+#   sensitive = true
+# }
