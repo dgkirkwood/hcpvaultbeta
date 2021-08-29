@@ -7,13 +7,23 @@ terraform {
   }
 }
 
-provider "hcp" {
-  # Configuration options
+data "terraform_remote_state" "hcp" {
+  backend = "remote"
+
+  config = {
+    organization = "dk "
+    workspaces = {
+      name = "hcp-config"
+    }
+  }
 }
 
+
+
+
 provider "vault" {
-    address = var.vault_address
-    token = var.vault_token
+    address = data.terraform_remote_state.hcp.vault_public_address
+    token = data.terraform_remote_state.hcp.vault_token
 }
 
 # Create the KVv2 Secrets engine
