@@ -11,7 +11,7 @@ data "terraform_remote_state" "hcp" {
   backend = "remote"
 
   config = {
-    organization = "dk "
+    organization = "dk"
     workspaces = {
       name = "hcp-config"
     }
