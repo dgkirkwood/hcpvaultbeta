@@ -209,6 +209,10 @@ resource "vault_identity_entity" "bob" {
   name      = "bob"
 }
 
+resource "vault_identity_entity" "charlie" {
+  name      = "charlie"
+}
+
 resource "vault_identity_entity_alias" "bob_userpass" {
   name            = "bob"
   mount_accessor  = vault_auth_backend.userpass.accessor
