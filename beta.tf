@@ -322,47 +322,47 @@ resource "vault_identity_entity_alias" "appx_approle" {
 
 
 
-resource "vault_approle_auth_backend_role_secret_id" "agent" {
-  backend   = vault_auth_backend.approle.path
-  role_name = vault_approle_auth_backend_role.prod.role_name
-}
+# resource "vault_approle_auth_backend_role_secret_id" "agent" {
+#   backend   = vault_auth_backend.approle.path
+#   role_name = vault_approle_auth_backend_role.prod.role_name
+# }
 
 
-resource "vault_pki_secret_backend_cert" "dancorp" {
+# resource "vault_pki_secret_backend_cert" "dancorp" {
 
-  backend = vault_mount.dancorp.path
-  name = vault_pki_secret_backend_role.dancorp.name
-  ttl = 250
+#   backend = vault_mount.dancorp.path
+#   name = vault_pki_secret_backend_role.dancorp.name
+#   ttl = 250
 
-  common_name = "mylb.dancorp.net"
-  auto_renew = true
-  min_seconds_remaining = 120
-}
-
-
-output "cert" {
-  value = vault_pki_secret_backend_cert.dancorp.certificate
-}
+#   common_name = "mylb.dancorp.net"
+#   auto_renew = true
+#   min_seconds_remaining = 120
+# }
 
 
-output "roleid" {
-  value = vault_approle_auth_backend_role.prod.role_id
-}
+# output "cert" {
+#   value = vault_pki_secret_backend_cert.dancorp.certificate
+# }
 
-output "secretid" {
-  value = vault_approle_auth_backend_role_secret_id.agent.secret_id
-  sensitive = true
-}
 
-resource "vault_generic_secret" "approledetails" {
-    path = "${vault_mount.kv.path}/approle"
-    data_json = <<EOT
-    {
-        "roleid": "${vault_approle_auth_backend_role.prod.role_id}",
-        "secretid": "${vault_approle_auth_backend_role_secret_id.agent.secret_id}"
-    }
-    EOT
-}
+# output "roleid" {
+#   value = vault_approle_auth_backend_role.prod.role_id
+# }
+
+# output "secretid" {
+#   value = vault_approle_auth_backend_role_secret_id.agent.secret_id
+#   sensitive = true
+# }
+
+# resource "vault_generic_secret" "approledetails" {
+#     path = "${vault_mount.kv.path}/approle"
+#     data_json = <<EOT
+#     {
+#         "roleid": "${vault_approle_auth_backend_role.prod.role_id}",
+#         "secretid": "${vault_approle_auth_backend_role_secret_id.agent.secret_id}"
+#     }
+#     EOT
+# }
 
 
 
