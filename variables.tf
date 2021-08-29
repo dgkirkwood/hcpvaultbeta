@@ -1,13 +1,3 @@
-variable "vault_token" {
-    description = "Grab the vault token from the HCP dashboard or create a restricted access token for with admin permissions for Terraform"
-}
-
-
-variable "vault_address" {
-  description = "The address for the Vault API. Note for HCP this must be the public address unless you are peering with the HCP VN and using TFC Agents"
-}
-
-
 variable "tenant_id" {
     description = "Your Azure tenant ID"
 }

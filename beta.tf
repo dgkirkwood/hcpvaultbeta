@@ -1,10 +1,42 @@
-
-
-provider "vault" {
-    address = var.vault_address
-    token = var.vault_token
+terraform {
+  required_providers {
+    hcp = {
+      source = "hashicorp/hcp"
+      version = "0.14.0"
+    }
+    vault = {
+      source = "hashicorp/vault"
+      version = "2.23.0"
+    }
+  }
 }
 
+provider "hcp" {
+  # Configuration options
+}
+
+provider "vault" {
+    address = hcp_vault_cluster.tfc.vault_public_endpoint_url
+    token = hcp_vault_cluster_admin_token.tfc.token
+}
+
+resource "hcp_hvn" "tfc" {
+  hvn_id         = "tfc-hvn"
+  cloud_provider = "aws"
+  region         = "us-west-2"
+  cidr_block     = "172.25.32.0/20"
+}
+
+resource "hcp_vault_cluster" "tfc" {
+  cluster_id = "tfc-vault-dev"
+  hvn_id     = hcp_hvn.tfc.hvn_id
+  public_endpoint = true
+  tier = "dev"
+}
+
+resource "hcp_vault_cluster_admin_token" "tfc" {
+  cluster_id = "tfc-vault-dev"
+}
 
 # Create the KVv2 Secrets engine
 resource "vault_mount" "kv" {
