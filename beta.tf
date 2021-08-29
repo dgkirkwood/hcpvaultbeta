@@ -22,8 +22,8 @@ data "terraform_remote_state" "hcp" {
 
 
 provider "vault" {
-    address = data.terraform_remote_state.hcp.vault_public_address
-    token = data.terraform_remote_state.hcp.vault_token
+    address = data.terraform_remote_state.hcp.outputs.vault_public_address
+    token = data.terraform_remote_state.hcp.outputs.vault_token
 }
 
 # Create the KVv2 Secrets engine
