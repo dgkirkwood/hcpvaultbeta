@@ -278,7 +278,7 @@ resource "vault_policy" "prod" {
     path "${vault_mount.kv.path}/data/prod" {
         capabilities = ["list", "read"]
     }
-    path "${vault_mount.dancorp.path}/prod" {
+    path "${vault_mount.dancorp.path}/issue/prod" {
         capabilities = ["list", "read", "create", "update"]
     }
 EOT
