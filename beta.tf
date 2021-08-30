@@ -80,7 +80,7 @@ resource "vault_generic_secret" "prod" {
     data_json = <<EOT
     {
         "username": "resourceadmin",
-        "password": "mySafeStaticPassword"
+        "password": "myNewPassword"
     }
     EOT
 }
