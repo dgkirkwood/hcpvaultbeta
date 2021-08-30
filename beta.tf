@@ -59,7 +59,7 @@ resource "vault_azure_secret_backend_role" "generated_role" {
 
   azure_roles {
     role_name = "Contributor"
-    scope =  "/subscriptions/14692f20-9428-451b-8298-102ed4e39c2a/resourceGroups/Sandpit"
+    scope =  "/subscriptions/14692f20-9428-451b-8298-102ed4e39c2a/resourceGroups/jamie-wright"
   }
 }
 
