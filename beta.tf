@@ -380,20 +380,20 @@ resource "vault_generic_secret" "approledetails" {
 
 
 
-resource "vault_nomad_secret_backend" "config" {
-    backend                   = "nomad"
-    description               = "Nomad tokens"
-    default_lease_ttl_seconds = "3600"
-    max_lease_ttl_seconds     = "7200"
-    max_ttl                   = "240"
-    address                   = "http://tf-lb-20210920031410652900000006-1872773464.ap-southeast-2.elb.amazonaws.com:4646"
-    token                     = "6c5754c0-3b00-5db5-c509-236c492adc06"
-    ttl                       = "120"
-}
+# resource "vault_nomad_secret_backend" "config" {
+#     backend                   = "nomad"
+#     description               = "Nomad tokens"
+#     default_lease_ttl_seconds = "3600"
+#     max_lease_ttl_seconds     = "7200"
+#     max_ttl                   = "240"
+#     address                   = "http://tf-lb-20210920031410652900000006-1872773464.ap-southeast-2.elb.amazonaws.com:4646"
+#     token                     = "6c5754c0-3b00-5db5-c509-236c492adc06"
+#     ttl                       = "120"
+# }
 
-resource "vault_nomad_secret_role" "prodops" {
-  backend   = vault_nomad_secret_backend.config.backend
-  role      = "prodops"
-  type      = "client"
-  policies  = ["prodops"]
-}
+# resource "vault_nomad_secret_role" "prodops" {
+#   backend   = vault_nomad_secret_backend.config.backend
+#   role      = "prodops"
+#   type      = "client"
+#   policies  = ["prodops"]
+# }
