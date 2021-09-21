@@ -12,5 +12,9 @@ variable "client_secret" {
 }
 
 variable "subscription_id" {
-    default = "Azure subscription ID"
+    description = "Azure subscription ID"
+}
+
+variable "okta_token" {
+    description = "The token used to auth to the Okta API"
 }

@@ -148,11 +148,24 @@ resource "vault_pki_secret_backend_role" "dancorp" {
   generate_lease = true
 }
 
+resource "vault_okta_auth_backend" "okta" {
+    description  = "Vault Okta Dev Account auth"
+    organization = "dev-11095918"
+    token        = var.okta_token
+
+    group {
+        group_name = "cloudNetworks"
+        policies   = ["prod"]
+    }
+}
+
 #Define the Userpass auth method
 resource "vault_auth_backend" "userpass" {
   type = "userpass"
   path = "userpass"
 }
+
+
 
 #Use the generic endpoint to create two users (this is a write only resource and has no specific TF resource)
 resource "vault_generic_endpoint" "alice" {
