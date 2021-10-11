@@ -353,6 +353,22 @@ resource "vault_pki_secret_backend_cert" "dancorp" {
   min_seconds_remaining = 120
 }
 
+resource "vault_auth_backend" "aws" {
+  type = "aws"
+}
+
+resource "vault_aws_auth_backend_role" "myrole" {
+  backend                         = vault_auth_backend.aws.path
+  role                            = "myrole"
+  auth_type                       = "iam"
+  bound_iam_role_arns             = ["arn:aws:iam::711129375688:role/vault-demo-hcp-dkirkwood "]
+  inferred_entity_type            = "ec2_instance"
+  inferred_aws_region             = "ap-southeast-2"
+  token_ttl                       = 60
+  token_max_ttl                   = 120
+  token_policies                  = ["default", "prod"]
+}
+
 
 output "cert" {
   value = vault_pki_secret_backend_cert.dancorp.certificate
