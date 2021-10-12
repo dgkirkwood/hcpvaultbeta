@@ -357,17 +357,25 @@ resource "vault_auth_backend" "aws" {
   type = "aws"
 }
 
+resource "vault_aws_auth_backend_client" "example" {
+  backend    = vault_auth_backend.aws.path
+  access_key = var.aws_auth_access_key
+  secret_key = var.aws_auth_secret
+}
+
 resource "vault_aws_auth_backend_role" "myrole" {
   backend                         = vault_auth_backend.aws.path
   role                            = "myrole"
   auth_type                       = "iam"
-  bound_iam_role_arns             = ["arn:aws:iam::711129375688:role/vault-demo-hcp-dkirkwood "]
+  bound_iam_role_arns             = ["arn:aws:iam::711129375688:role/moayad-ec2-role"]
+  bound_regions                   = ["ap-southeast-2"]
   inferred_entity_type            = "ec2_instance"
   inferred_aws_region             = "ap-southeast-2"
   token_ttl                       = 60
   token_max_ttl                   = 120
   token_policies                  = ["default", "prod"]
 }
+
 
 
 output "cert" {

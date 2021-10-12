@@ -18,3 +18,11 @@ variable "subscription_id" {
 variable "okta_token" {
     description = "The token used to auth to the Okta API"
 }
+
+variable "aws_auth_access_key" {
+    description = "The access key for the IAM user used for AWS auth"
+}
+
+variable "aws_auth_secret" {
+    description = "The secret for your IAM user"
+}
