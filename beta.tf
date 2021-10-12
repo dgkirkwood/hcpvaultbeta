@@ -368,7 +368,6 @@ resource "vault_aws_auth_backend_role" "myrole" {
   role                            = "myrole"
   auth_type                       = "iam"
   bound_iam_role_arns             = ["arn:aws:iam::711129375688:role/moayad-ec2-role"]
-  bound_regions                   = ["ap-southeast-2"]
   inferred_entity_type            = "ec2_instance"
   inferred_aws_region             = "ap-southeast-2"
   token_ttl                       = 60
