@@ -365,7 +365,7 @@ resource "vault_aws_auth_backend_client" "example" {
 
 resource "vault_aws_auth_backend_role" "myrole" {
   backend                         = vault_auth_backend.aws.path
-  role                            = "myrole"
+  role                            = "aws_prod"
   auth_type                       = "iam"
   bound_iam_role_arns             = ["arn:aws:iam::711129375688:role/moayad-ec2-role"]
   inferred_entity_type            = "ec2_instance"
