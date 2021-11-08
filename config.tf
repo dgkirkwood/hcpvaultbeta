@@ -38,27 +38,27 @@ resource "vault_mount" "kv" {
 }
 
 
-#Create the Azure secrets engine, with creds that have scope to manage Service Principals
-resource "vault_azure_secret_backend" "azure" {
-  subscription_id = var.subscription_id
-  tenant_id = var.tenant_id
-  client_id = var.client_id
-  client_secret = var.client_secret
-  environment = "AzurePublicCloud"
-}
+# #Create the Azure secrets engine, with creds that have scope to manage Service Principals
+# resource "vault_azure_secret_backend" "azure" {
+#   subscription_id = var.subscription_id
+#   tenant_id = var.tenant_id
+#   client_id = var.client_id
+#   client_secret = var.client_secret
+#   environment = "AzurePublicCloud"
+# }
 
-#Define the generated roles for the Azure secrets engine. Scopes can be role or group-based
-resource "vault_azure_secret_backend_role" "generated_role" {
-  backend                     = vault_azure_secret_backend.azure.path
-  role                        = "Sandpit"
-  ttl                         = 300
-  max_ttl                     = 600
+# #Define the generated roles for the Azure secrets engine. Scopes can be role or group-based
+# resource "vault_azure_secret_backend_role" "generated_role" {
+#   backend                     = vault_azure_secret_backend.azure.path
+#   role                        = "Sandpit"
+#   ttl                         = 300
+#   max_ttl                     = 600
 
-  azure_roles {
-    role_name = "Contributor"
-    scope =  "/subscriptions/14692f20-9428-451b-8298-102ed4e39c2a/resourceGroups/jamie-wright"
-  }
-}
+#   azure_roles {
+#     role_name = "Contributor"
+#     scope =  "/subscriptions/14692f20-9428-451b-8298-102ed4e39c2a/resourceGroups/jamie-wright"
+#   }
+# }
 
 
 #Static secret definition 
@@ -268,18 +268,18 @@ resource "vault_identity_group" "admin" {
 
 
 #Create policies to define path-based CRUD operations against secrets and auth methods within Vault
-resource "vault_policy" "rnd" {
-  name = "rnd"
+# resource "vault_policy" "rnd" {
+#   name = "rnd"
 
-  policy = <<EOT
-    path "${vault_mount.kv.path}/data/rnd" {
-        capabilities = ["list", "read"]
-    }
-    path "${vault_azure_secret_backend.azure.path}/creds/Sandpit" {
-        capabilities = ["read"]
-    }
-EOT
-}
+#   policy = <<EOT
+#     path "${vault_mount.kv.path}/data/rnd" {
+#         capabilities = ["list", "read"]
+#     }
+#     path "${vault_azure_secret_backend.azure.path}/creds/Sandpit" {
+#         capabilities = ["read"]
+#     }
+# EOT
+# }
 
 resource "vault_policy" "prod" {
   name = "prod"
