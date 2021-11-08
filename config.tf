@@ -300,7 +300,7 @@ resource "vault_identity_entity_alias" "admin_userpass" {
 resource "vault_identity_group" "rnd" {
   name     = "rnd"
   type     = "internal"
-  policies = ["rnd"]
+  policies = ["west"]
   member_entity_ids = [vault_identity_entity.alice.id]
 }
 
