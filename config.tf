@@ -135,6 +135,14 @@ resource "vault_pki_secret_backend_root_cert" "dancorprootca" {
   organization = "DanCorp"
 }
 
+resource "vault_pki_secret_backend_intermediate_cert_request" "dev_intermediate" {
+  depends_on = [vault_mount.dancorp]
+
+  backend = vault_mount.dancorp.path
+
+  type        = "internal"
+  common_name = "dev.dancorp.net"
+}
 
 
 resource "vault_pki_secret_backend_role" "dancorp" {
