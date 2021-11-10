@@ -363,10 +363,10 @@ resource "vault_approle_auth_backend_role_secret_id" "agent" {
 resource "vault_pki_secret_backend_cert" "dancorp" {
 
   backend = vault_mount.dancorp.path
-  name = vault_pki_secret_backend_role.dancorp.name
+  name = vault_pki_secret_backend_role.dancorpdev.name
   ttl = 250
 
-  common_name = "mylb.dancorp.net"
+  common_name = "mylb.dev.dancorp.net"
   auto_renew = true
   min_seconds_remaining = 120
 }
