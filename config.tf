@@ -390,7 +390,7 @@ resource "vault_aws_auth_backend_role" "myrole" {
   inferred_aws_region             = "ap-southeast-2"
   token_ttl                       = 60
   token_max_ttl                   = 120
-  token_policies                  = ["default", "prod"]
+  token_policies                  = ["default", "rnd"]
 }
 
 
