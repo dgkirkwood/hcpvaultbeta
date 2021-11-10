@@ -37,61 +37,6 @@ resource "vault_mount" "kv" {
   }
 }
 
-resource "vault_mount" "westkv" {
-  path        = "kv"
-  type        = "kv-v2"
-  description = "Key/Value V2 - with versioning"
-
-
-  options = {
-    version = 2
-    max_versions = 3
-    cas_enabled = false
-  }
-}
-
-resource "vault_generic_secret" "tier2" {
-    path = "${vault_mount.westkv.path}/a00001-dev/elz_tier2_secret"
-    data_json = <<EOT
-    {
-        "api_token": "tier2",
-        "scope": "all api resources"
-    }
-    EOT
-}
-
-resource "vault_generic_secret" "tier3" {
-    path = "${vault_mount.westkv.path}/a00001-dev/elz_tier3_secret"
-    data_json = <<EOT
-    {
-        "api_token": "tier3",
-        "scope": "all api resources"
-    }
-    EOT
-}
-
-resource "vault_policy" "west" {
-  name = "west"
-
-  policy = <<EOT
-path "kv/*" {
-capabilities = ["list"]
-}
-
-path "kv/data/a00001-dev/*" {
-  capabilities = ["list", "read", "create", "update", "delete"]
-}
-
-path "kv/data/a00001-dev/elz_tier2_secret" {
-  capabilities = ["deny"]
-}
-
-path "kv/data/a00001-dev/elz_tier3_secret" {
-  capabilities = ["read"]
-}
-EOT
-}
-
 
 
 # #Create the Azure secrets engine, with creds that have scope to manage Service Principals
@@ -300,7 +245,7 @@ resource "vault_identity_entity_alias" "admin_userpass" {
 resource "vault_identity_group" "rnd" {
   name     = "rnd"
   type     = "internal"
-  policies = ["west"]
+  policies = ["rnd"]
   member_entity_ids = [vault_identity_entity.alice.id]
 }
 
@@ -324,18 +269,15 @@ resource "vault_identity_group" "admin" {
 
 
 #Create policies to define path-based CRUD operations against secrets and auth methods within Vault
-# resource "vault_policy" "rnd" {
-#   name = "rnd"
+resource "vault_policy" "rnd" {
+  name = "rnd"
 
-#   policy = <<EOT
-#     path "${vault_mount.kv.path}/data/rnd" {
-#         capabilities = ["list", "read"]
-#     }
-#     path "${vault_azure_secret_backend.azure.path}/creds/Sandpit" {
-#         capabilities = ["read"]
-#     }
-# EOT
-# }
+  policy = <<EOT
+    path "${vault_mount.kv.path}/data/rnd" {
+        capabilities = ["list", "read"]
+    }
+EOT
+}
 
 resource "vault_policy" "prod" {
   name = "prod"
