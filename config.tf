@@ -154,6 +154,15 @@ resource "vault_pki_secret_backend_role" "dancorp" {
   generate_lease = true
 }
 
+resource "vault_pki_secret_backend_role" "dancorpdev" {
+  backend = vault_mount.dancorp.path
+  name    = "dev"
+  allowed_domains = ["dev.dancorp.net"]
+  allow_subdomains = true
+  max_ttl = "300s"
+  generate_lease = true
+}
+
 resource "vault_okta_auth_backend" "okta" {
     description  = "Vault Okta Dev Account auth"
     organization = "dev-11095918"
@@ -283,6 +292,9 @@ resource "vault_policy" "rnd" {
   policy = <<EOT
     path "${vault_mount.kv.path}/data/rnd" {
         capabilities = ["list", "read"]
+    }
+    path "${vault_mount.dancorp.path}/issue/dev" {
+        capabilities = ["list", "read", "create", "update"]
     }
 EOT
 }
