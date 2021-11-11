@@ -158,10 +158,10 @@ resource "vault_pki_secret_backend_role" "dancorpdev" {
   backend = vault_mount.dancorp.path
   name    = "dev"
   allowed_domains = ["dev.dancorp.net"]
-  country = "AU"
-  organization = "Dancorp LTD"
-  postal_code = "2000"
-  ou = "Developers"
+  country = ["AU"]
+  organization = ["Dancorp LTD"]
+  postal_code = ["2000"]
+  ou = ["Developers"]
   allow_subdomains = true
   max_ttl = "300s"
   generate_lease = true
