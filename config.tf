@@ -158,6 +158,10 @@ resource "vault_pki_secret_backend_role" "dancorpdev" {
   backend = vault_mount.dancorp.path
   name    = "dev"
   allowed_domains = ["dev.dancorp.net"]
+  country = "AU"
+  organization = "Dancorp LTD"
+  postal_code = "2000"
+  ou = "Developers"
   allow_subdomains = true
   max_ttl = "300s"
   generate_lease = true
@@ -334,6 +338,13 @@ resource "vault_approle_auth_backend_role" "prod" {
   token_ttl = 172800
 }
 
+resource "vault_approle_auth_backend_role" "rnd" {
+  backend        = vault_auth_backend.approle.path
+  role_name      = "rnd"
+  token_policies = ["rnd"]
+  token_ttl = 172800
+}
+
 resource "vault_approle_auth_backend_role" "appx" {
   backend        = vault_auth_backend.approle.path
   role_name      = "appx"
@@ -356,7 +367,7 @@ resource "vault_identity_entity_alias" "appx_approle" {
 
 resource "vault_approle_auth_backend_role_secret_id" "agent" {
   backend   = vault_auth_backend.approle.path
-  role_name = vault_approle_auth_backend_role.prod.role_name
+  role_name = vault_approle_auth_backend_role.rnd.role_name
 }
 
 
@@ -401,7 +412,7 @@ output "cert" {
 
 
 output "roleid" {
-  value = vault_approle_auth_backend_role.prod.role_id
+  value = vault_approle_auth_backend_role.rnd.role_id
 }
 
 output "secretid" {
