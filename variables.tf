@@ -26,3 +26,15 @@ variable "aws_auth_access_key" {
 variable "aws_auth_secret" {
     description = "The secret for your IAM user"
 }
+
+variable "oidc_id" {
+    description = "OKTA client id"
+}
+
+variable "oidc_secret" {
+    description = "OKTA client secret"
+}
+
+variable "oidc_audience" {
+    description = "OKTA audience"
+}

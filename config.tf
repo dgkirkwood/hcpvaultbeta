@@ -432,20 +432,43 @@ resource "vault_generic_secret" "approledetails" {
 
 
 
-# resource "vault_nomad_secret_backend" "config" {
-#     backend                   = "nomad"
-#     description               = "Nomad tokens"
-#     default_lease_ttl_seconds = "3600"
-#     max_lease_ttl_seconds     = "7200"
-#     max_ttl                   = "240"
-#     address                   = "http://tf-lb-20210920031410652900000006-1872773464.ap-southeast-2.elb.amazonaws.com:4646"
-#     token                     = "6c5754c0-3b00-5db5-c509-236c492adc06"
-#     ttl                       = "120"
-# }
+resource "vault_jwt_auth_backend" "okta_oidc" {
+  description        = "Okta OIDC"
+  path               = "okta_oidc
+  type               = "oidc"
+  oidc_discovery_url = "https://dev-11095918.okta.com/oauth2/aus46ue6zqDRtAdqU5d7"
+  bound_issuer       = "https://dev-11095918.okta.com/oauth2/aus46ue6zqDRtAdqU5d7"
+  oidc_client_id     = var.oidc_id
+  oidc_client_secret = var.oidc_secret
+  tune {
+    listing_visibility = "unauth"
+    default_lease_ttl  = "768h"
+    max_lease_ttl      = "768h"
+    token_type         = "default-service"
+  }
+}
 
-# resource "vault_nomad_secret_role" "prodops" {
-#   backend   = vault_nomad_secret_backend.config.backend
-#   role      = "prodops"
-#   type      = "client"
-#   policies  = ["prodops"]
-# }
+resource "vault_jwt_auth_backend_role" "okta_role" {
+  backend        = vault_jwt_auth_backend.okta_oidc.path
+  role_name      = "rnd"
+  token_policies = ["rnd"]
+
+  allowed_redirect_uris = [
+    "${data.terraform_remote_state.hcp.outputs.vault_public_address}/ui/vault/auth/${vault_jwt_auth_backend.okta_oidc.path}/oidc/callback",
+
+    # This is for logging in with the CLI if you want.
+    "http://localhost:8250/oidc/callback",
+  ]
+
+  user_claim      = "email"
+  role_type       = "oidc"
+  bound_audiences = var.oidc_audience
+  oidc_scopes = [
+    "openid",
+    "profile",
+    "email",
+  ]
+  bound_claims = {
+    groups = ["vault_users"]
+  }
+}
