@@ -462,7 +462,7 @@ resource "vault_jwt_auth_backend_role" "okta_role" {
 
   user_claim      = "email"
   role_type       = "oidc"
-  bound_audiences = var.oidc_audience
+  bound_audiences = ["api://vault", var.oidc_audience]
   oidc_scopes = [
     "openid",
     "profile",
