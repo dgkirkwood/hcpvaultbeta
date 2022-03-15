@@ -434,7 +434,7 @@ resource "vault_generic_secret" "approledetails" {
 
 resource "vault_jwt_auth_backend" "okta_oidc" {
   description        = "Okta OIDC"
-  path               = "okta_oidc
+  path               = "okta_oidc"
   type               = "oidc"
   oidc_discovery_url = "https://dev-11095918.okta.com/oauth2/aus46ue6zqDRtAdqU5d7"
   bound_issuer       = "https://dev-11095918.okta.com/oauth2/aus46ue6zqDRtAdqU5d7"
