@@ -469,6 +469,6 @@ resource "vault_jwt_auth_backend_role" "okta_role" {
     "email",
   ]
   bound_claims = {
-    groups = ["vault_users"]
+    groups = "vault_users"
   }
 }
