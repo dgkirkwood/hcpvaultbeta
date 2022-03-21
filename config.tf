@@ -171,7 +171,6 @@ resource "vault_okta_auth_backend" "okta" {
     description  = "Vault Okta Dev Account auth"
     organization = "dev-11095918"
     token        = var.okta_token
-    token_no_default_policy = true
 
     group {
         group_name = "cloudNetworks"
