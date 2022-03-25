@@ -52,8 +52,8 @@ resource "vault_azure_secret_backend" "azure" {
 resource "vault_azure_secret_backend_role" "generated_role" {
   backend                     = vault_azure_secret_backend.azure.path
   role                        = "Sandpit"
-  ttl                         = 300
-  max_ttl                     = 600
+  ttl                         = 7200
+  max_ttl                     = 7200
 
   azure_roles {
     role_name = "Contributor"
@@ -348,7 +348,7 @@ resource "vault_approle_auth_backend_role" "rnd" {
 resource "vault_approle_auth_backend_role" "appx" {
   backend        = vault_auth_backend.approle.path
   role_name      = "appx"
-  token_policies = ["prod"]
+  token_policies = ["admin"]
   token_ttl = 172800
 }
 
@@ -412,12 +412,11 @@ output "cert" {
 
 
 output "roleid" {
-  value = vault_approle_auth_backend_role.rnd.role_id
+  value = vault_approle_auth_backend_role.appx.role_id
 }
 
 output "secretid" {
-  value = vault_approle_auth_backend_role_secret_id.agent.secret_id
-  sensitive = true
+  value = vault_approle_auth_backend_role_secret_id.appx.secret_id
 }
 
 resource "vault_generic_secret" "approledetails" {
