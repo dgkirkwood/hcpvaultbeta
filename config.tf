@@ -365,9 +365,9 @@ resource "vault_identity_entity_alias" "appx_approle" {
 
 
 
-resource "vault_approle_auth_backend_role_secret_id" "agent" {
+resource "vault_approle_auth_backend_role_secret_id" "appx" {
   backend   = vault_auth_backend.approle.path
-  role_name = vault_approle_auth_backend_role.rnd.role_name
+  role_name = vault_approle_auth_backend_role.appx.role_name
 }
 
 
