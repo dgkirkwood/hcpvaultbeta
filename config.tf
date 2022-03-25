@@ -61,6 +61,14 @@ resource "vault_azure_secret_backend_role" "generated_role" {
   }
 }
 
+data "vault_azure_access_credentials" "azurerm_auth" {
+backend = vault_azure_secret_backend.azure.path
+role = vault_azure_secret_backend_role.generated_role.role
+validate_creds = true
+num_sequential_successes = 30
+max_cred_validation_seconds = 7200
+}
+
 
 #Static secret definition 
 resource "vault_generic_secret" "rnd" {
