@@ -219,6 +219,18 @@ resource "vault_generic_endpoint" "bob" {
 EOT
 }
 
+resource "vault_generic_endpoint" "charlie" {
+  depends_on           = [vault_auth_backend.userpass]
+  path                 = "auth/userpass/users/charlie"
+  ignore_absent_fields = true
+
+  data_json = <<EOT
+{
+  "password": "charlie"
+}
+EOT
+}
+
 resource "vault_generic_endpoint" "admin" {
   depends_on           = [vault_auth_backend.userpass]
   path                 = "auth/userpass/users/admin"
