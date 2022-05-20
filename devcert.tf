@@ -50,3 +50,14 @@ resource "vault_pki_secret_backend_role" "eastpacjira" {
   max_ttl = "86400s"
   generate_lease = true
 }
+
+
+resource "vault_policy" "jiracert" {
+  name = "jiracert"
+
+  policy = <<EOT
+    path "${vault_mount.eastpac.path}/issue/jira" {
+        capabilities = ["list", "read", "create", "update"]
+    }
+EOT
+}

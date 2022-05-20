@@ -259,6 +259,12 @@ resource "vault_identity_entity_alias" "bob_userpass" {
   canonical_id    = vault_identity_entity.bob.id
 }
 
+resource "vault_identity_entity_alias" "charlie_userpass" {
+  name            = "charlie"
+  mount_accessor  = vault_auth_backend.userpass.accessor
+  canonical_id    = vault_identity_entity.charlie.id
+}
+
 resource "vault_identity_entity" "admin" {
   name      = "admin"
 }
@@ -291,6 +297,13 @@ resource "vault_identity_group" "admin" {
   type     = "internal"
   policies = ["admin"]
   member_entity_ids = [vault_identity_entity.admin.id]
+}
+
+resource "vault_identity_group" "jira" {
+  name     = "jira"
+  type     = "internal"
+  policies = ["jiracert"]
+  member_entity_ids = [vault_identity_entity.admin.id, vault_identity_entity.charlie.id]
 }
 
 
