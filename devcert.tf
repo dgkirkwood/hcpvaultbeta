@@ -28,7 +28,7 @@ resource "vault_pki_secret_backend_root_cert" "eastpacrootca" {
   organization = "eastpac"
 }
 
-resource "vault_pki_secret_backend_intermediate_cert_request" "dev_intermediate" {
+resource "vault_pki_secret_backend_intermediate_cert_request" "eastpac_dev_intermediate" {
   depends_on = [vault_mount.eastpac]
 
   backend = vault_mount.eastpac.path
